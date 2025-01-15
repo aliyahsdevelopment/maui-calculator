@@ -41,7 +41,7 @@
         <Button Grid.Row="6" Grid.Column="0" Text="+ / -" />
         <Button Grid.Row="6" Grid.Column="1" Text="0" Clicked="NumberButton" />
         <Button Grid.Row="6" Grid.Column="2" Text="," />
-        <Button Grid.Row="6" Grid.Column="3" Text="=" />
+        <Button Grid.Row="6" Grid.Column="3" Text="=" Clicked="EqualsButton" />
         
         
     </Grid>
