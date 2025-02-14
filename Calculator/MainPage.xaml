@@ -5,13 +5,28 @@
 
 
     <Grid 
-        RowDefinitions="auto,*,*,*,*,*,*,*,*,*"
-        RowSpacing="2"
+        RowDefinitions="auto,auto,*,*,*,*,*,*,*,*"
+        RowSpacing="4"
         ColumnDefinitions="*,*,*,*"
         ColumnSpacing="2"
+        Padding="10"
     >
-        <Entry Grid.Row="0" Grid.Column="0" x:Name="EntryCalculation" />
-        <Entry Grid.Row="1" Grid.Column="0" x:Name="EntryResult" />
+        <Entry Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
+            x:Name="EntryCalculation" 
+            HorizontalTextAlignment="End"
+            FontSize="25"
+            Text="0"
+        />
+
+        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" 
+            x:Name="ResultLabel" 
+            Text="0" 
+            HorizontalTextAlignment="End" 
+            FontSize="20" 
+            FontAttributes="Bold"
+               
+            Padding="5"
+        />
 
         <!-- Rad 1 -->
         <Button Grid.Row="2" Grid.Column="0" Text="%" />
@@ -38,10 +53,10 @@
         <Button Grid.Row="5" Grid.Column="3" Text="+" Clicked="OperandButton" />
 
         <!-- Rad 5 -->
-        <Button Grid.Row="6" Grid.Column="0" Text="+ / -" />
+        <Button Grid.Row="6" Grid.Column="0" Text="Erase" Clicked="EraseButton" />
         <Button Grid.Row="6" Grid.Column="1" Text="0" Clicked="NumberButton" />
-        <Button Grid.Row="6" Grid.Column="2" Text="," />
-        <Button Grid.Row="6" Grid.Column="3" Text="=" />
+        <Button Grid.Row="6" Grid.Column="2" Text="," Clicked="CommaButton" />
+        <Button Grid.Row="6" Grid.Column="3" Text="=" Clicked="EqualsButton" />
         
         
     </Grid>
