@@ -1,13 +1,15 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Calculator
 {
     public partial class MainPage : ContentPage
     {
-        private double sumTemp = 0;
-        private double operand = 0;
-        private string operation = "";
-        private bool firstCalculation = true;
+        double sumTemp = 0;
+        double operand = 0;
+        string operation = "";
+        bool firstCalculation = true;
 
         public MainPage()
         {
@@ -20,11 +22,6 @@ namespace Calculator
 
             int height = 675;
             int width = 475;
-            //this.Window.MinimumHeight = height;
-            //this.Window.MaximumHeight = height;
-
-            //this.Window.MinimumWidth = width;
-            //this.Window.MaximumWidth = width;
 
             this.Window.Height = height;
             this.Window.Width = width;
@@ -50,6 +47,7 @@ namespace Calculator
             {
                 EntryCalculation.Text += button.Text;
             }
+
             if (firstCalculation)
             {
                 if (double.TryParse(EntryCalculation.Text, out double sumTempNew))
@@ -59,10 +57,15 @@ namespace Calculator
             }
         }
 
+        private void EraseButton(object sender, EventArgs e)
+        {
+            if (EntryCalculation.Text.Length > 0)
+                EntryCalculation.Text = EntryCalculation.Text.Substring(0, EntryCalculation.Text.Length - 1);
+        }
+
         private void CommaButton(object sender, EventArgs e)
         {
-            
-            //EntryCalculation.Text += ",";
+            EntryCalculation.Text += ",";
         }
 
         private void OperandButton(object sender, EventArgs e)
@@ -96,9 +99,10 @@ namespace Calculator
                     return;
                 }
 
-                input = input.Replace("X", "*");
-                input = input.Replace('.', ',');
-                double result = Evaluate(input);
+                input = input.Replace("X", "*");  // Convert 'X' to '*' for multiplication
+                input = input.Replace('.', ',');  // Convert '.' to ',' if needed
+
+                double result = CalculateResult(input);
 
                 sumTemp = result;
                 ResultLabel.Text = sumTemp.ToString();
@@ -114,28 +118,29 @@ namespace Calculator
             }
         }
 
-        private double Evaluate(string expression)
+        private double CalculateResult(string expression)
         {
             List<double> numbers = new List<double>();
             List<char> operators = new List<char>();
 
             string currentNumber = "";
+            // Parse the expression into numbers and operators
             foreach (char c in expression)
             {
-                if (char.IsDigit(c) || c == ',')
+                if (char.IsDigit(c) || c == ',')  // Handle digits and decimal points
                 {
                     currentNumber += c;
                 }
-                else if ("+-*/".Contains(c))
+                else if ("+-*/".Contains(c))  // Handle operators
                 {
                     numbers.Add(double.Parse(currentNumber));
                     currentNumber = "";
                     operators.Add(c);
                 }
             }
-            numbers.Add(double.Parse(currentNumber));
+            numbers.Add(double.Parse(currentNumber)); // Add the last number
 
-            // Go by math rules and handle the * and / first.
+            // First pass: handle multiplication and division (higher precedence)
             for (int i = 0; i < operators.Count; i++)
             {
                 if (operators[i] == '*' || operators[i] == '/')
@@ -144,11 +149,11 @@ namespace Calculator
                     numbers[i] = result;
                     numbers.RemoveAt(i + 1);
                     operators.RemoveAt(i);
-                    i--;
+                    i--;  // Recheck the modified list at the same index
                 }
             }
 
-            // Go by math rules and handle the + and - lastly.
+            // Second pass: handle addition and subtraction (lower precedence)
             double finalResult = numbers[0];
             for (int i = 0; i < operators.Count; i++)
             {
@@ -157,24 +162,30 @@ namespace Calculator
 
             return finalResult;
         }
+
         private double ApplyOperation(double a, double b, char op)
         {
-            if (op == '+') return a + b;
-            if (op == '-') return a - b;
-            if (op == '*') return a * b;
-            if (op == '/')
+            switch (op)
             {
-                if (b != 0)
-                {
-                    return a / b;
-                }
-                else
-                {
-                    DisplayAlert("Error", "Unable to divide a number by zero.", "Ok");
-                }
+                case '+':
+                    return a + b;
+                case '-':
+                    return a - b;
+                case '*':
+                    return a * b;
+                case '/':
+                    if (b != 0)
+                    {
+                        return a / b;
+                    }
+                    else
+                    {
+                        DisplayAlert("Error", "Unable to divide by zero.", "Ok");
+                        return 0;
+                    }
+                default:
+                    throw new InvalidOperationException($"Unsupported operator: {op}");
             }
-            return 0;
         }
-
     }
 }

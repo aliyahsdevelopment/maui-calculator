@@ -11,23 +11,22 @@
         ColumnSpacing="2"
         Padding="10"
     >
-        <!-- Entry with increased font size and distinct background color for better visibility -->
         <Entry Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
-               x:Name="EntryCalculation" 
-               HorizontalTextAlignment="End" 
-               FontSize="30" 
-               BackgroundColor="LightGray" />
+            x:Name="EntryCalculation" 
+            HorizontalTextAlignment="End"
+            FontSize="25"
+            Text="0"
+        />
 
-        <!-- Label with increased font size, bold text, and different background color -->
         <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" 
-               x:Name="ResultLabel" 
-               Text="0" 
-               HorizontalTextAlignment="End" 
-               FontSize="20" 
-               FontAttributes="Bold"
+            x:Name="ResultLabel" 
+            Text="0" 
+            HorizontalTextAlignment="End" 
+            FontSize="20" 
+            FontAttributes="Bold"
                
-               BackgroundColor="LightYellow"
-               Padding="5" />
+            Padding="5"
+        />
 
         <!-- Rad 1 -->
         <Button Grid.Row="2" Grid.Column="0" Text="%" />
@@ -54,7 +53,7 @@
         <Button Grid.Row="5" Grid.Column="3" Text="+" Clicked="OperandButton" />
 
         <!-- Rad 5 -->
-        <Button Grid.Row="6" Grid.Column="0" Text="+ / -" />
+        <Button Grid.Row="6" Grid.Column="0" Text="Erase" Clicked="EraseButton" />
         <Button Grid.Row="6" Grid.Column="1" Text="0" Clicked="NumberButton" />
         <Button Grid.Row="6" Grid.Column="2" Text="," Clicked="CommaButton" />
         <Button Grid.Row="6" Grid.Column="3" Text="=" Clicked="EqualsButton" />
