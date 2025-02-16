@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 namespace Calculator
@@ -20,11 +19,11 @@ namespace Calculator
         {
             base.OnAppearing();
 
-            int height = 675;
-            int width = 475;
+            this.Window.Height = 675;
+            this.Window.Width = 475;
 
-            this.Window.Height = height;
-            this.Window.Width = width;
+            this.Window.MinimumHeight = 450;
+            this.Window.MinimumWidth = 300;
         }
 
         private void ClearButton_Clicked(object sender, EventArgs e)
@@ -99,10 +98,10 @@ namespace Calculator
                     return;
                 }
 
-                input = input.Replace("X", "*");  // Convert 'X' to '*' for multiplication
-                input = input.Replace('.', ',');  // Convert '.' to ',' if needed
+                input = input.Replace("X", "*");
+                input = input.Replace(',', '.');
 
-                double result = CalculateResult(input);
+                double result = CalculateInput(input);
 
                 sumTemp = result;
                 ResultLabel.Text = sumTemp.ToString();
@@ -118,66 +117,33 @@ namespace Calculator
             }
         }
 
-        private double CalculateResult(string expression)
+        private double CalculateInput(string expression)
         {
-            List<double> numbers = new List<double>();
-            List<char> operators = new List<char>();
+            string[] calculationArray = Regex.Split(expression, @"(?<=[+\-*/])|(?=[+\-*/])");
+            double result = double.Parse(calculationArray[0]);
 
-            string currentNumber = "";
-            // Parse the expression into numbers and operators
-            foreach (char c in expression)
+            for (int i = 1; i < calculationArray.Length; i += 2)
             {
-                if (char.IsDigit(c) || c == ',')  // Handle digits and decimal points
-                {
-                    currentNumber += c;
-                }
-                else if ("+-*/".Contains(c))  // Handle operators
-                {
-                    numbers.Add(double.Parse(currentNumber));
-                    currentNumber = "";
-                    operators.Add(c);
-                }
-            }
-            numbers.Add(double.Parse(currentNumber)); // Add the last number
+                char op = char.Parse(calculationArray[i]);
+                double num = double.Parse(calculationArray[i + 1]);
 
-            // First pass: handle multiplication and division (higher precedence)
-            for (int i = 0; i < operators.Count; i++)
-            {
-                if (operators[i] == '*' || operators[i] == '/')
-                {
-                    double result = ApplyOperation(numbers[i], numbers[i + 1], operators[i]);
-                    numbers[i] = result;
-                    numbers.RemoveAt(i + 1);
-                    operators.RemoveAt(i);
-                    i--;  // Recheck the modified list at the same index
-                }
+                double calculationResult = ApplyOperation(result, num, op);
+
+                result = calculationResult;
             }
 
-            // Second pass: handle addition and subtraction (lower precedence)
-            double finalResult = numbers[0];
-            for (int i = 0; i < operators.Count; i++)
-            {
-                finalResult = ApplyOperation(finalResult, numbers[i + 1], operators[i]);
-            }
-
-            return finalResult;
+            return result;
         }
 
         private double ApplyOperation(double a, double b, char op)
         {
             switch (op)
             {
-                case '+':
-                    return a + b;
-                case '-':
-                    return a - b;
-                case '*':
-                    return a * b;
+                case '+':  return a + b;
+                case '-': return a - b;
+                case '*':  return a * b;
                 case '/':
-                    if (b != 0)
-                    {
-                        return a / b;
-                    }
+                    if (a != 0 && b != 0) return a / b;
                     else
                     {
                         DisplayAlert("Error", "Unable to divide by zero.", "Ok");
