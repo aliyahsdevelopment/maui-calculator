@@ -127,9 +127,7 @@ namespace Calculator
                 char op = char.Parse(calculationArray[i]);
                 double num = double.Parse(calculationArray[i + 1]);
 
-                double calculationResult = ApplyOperation(result, num, op);
-
-                result = calculationResult;
+                result = ApplyOperation(result, num, op);
             }
 
             return result;
