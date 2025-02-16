@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Calculator.MainPage">
 
-
     <Grid 
         RowDefinitions="auto,auto,*,*,*,*,*,*,*,*"
         RowSpacing="4"
         ColumnDefinitions="*,*,*,*"
         ColumnSpacing="2"
         Padding="10"
+        MinimumHeightRequest="500"
+        MinimumWidthRequest="250"
     >
         <Entry Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
             x:Name="EntryCalculation" 
@@ -31,7 +32,7 @@
         <!-- Rad 1 -->
         <Button Grid.Row="2" Grid.Column="0" Text="%" />
         <Button Grid.Row="2" Grid.Column="1" Text="CE" Clicked="ClearButton_Clicked" />
-        <Button Grid.Row="2" Grid.Column="2" Text="C" />
+        <Button Grid.Row="2" Grid.Column="2" Text="C" Clicked="ClearButton_Clicked" />
         <Button Grid.Row="2" Grid.Column="3" Text="X" Clicked="OperandButton" />
 
         <!-- Rad 2 -->
