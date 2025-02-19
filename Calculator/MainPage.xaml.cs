@@ -1,14 +1,11 @@
-﻿using System.Text.RegularExpressions;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Globalization;
 
 namespace Calculator
 {
     public partial class MainPage : ContentPage
     {
         double sumTemp = 0;
-        double operand = 0;
-        string operation = "";
-        bool firstCalculation = true;
 
         public MainPage()
         {
@@ -19,6 +16,7 @@ namespace Calculator
         {
             base.OnAppearing();
 
+            // Set minimum height and width to stop the window from getting TOO small where the text is unreadable.
             this.Window.Height = 675;
             this.Window.Width = 475;
 
@@ -31,7 +29,6 @@ namespace Calculator
             EntryCalculation.Text = "0";
             ResultLabel.Text = "0";
             sumTemp = 0;
-            operation = "";
         }
 
         private void NumberButton(object sender, EventArgs e)
@@ -45,14 +42,6 @@ namespace Calculator
             else
             {
                 EntryCalculation.Text += button.Text;
-            }
-
-            if (firstCalculation)
-            {
-                if (double.TryParse(EntryCalculation.Text, out double sumTempNew))
-                {
-                    sumTemp = sumTempNew;
-                }
             }
         }
 
@@ -77,9 +66,7 @@ namespace Calculator
                 return;
             }
 
-            operation = button.Text;
             EntryCalculation.Text += op;
-            firstCalculation = false;
         }
 
         private void EqualsButton(object sender, EventArgs e)
@@ -99,7 +86,9 @@ namespace Calculator
                 }
 
                 input = input.Replace("X", "*");
-                input = input.Replace(',', '.');
+                input = input.Replace("x", "*");
+                input = input.Replace(",", ".");
+                input = input.Replace(" ", "");
 
                 double result = CalculateInput(input);
 
@@ -108,7 +97,6 @@ namespace Calculator
                 EntryCalculation.Text = sumTemp.ToString();
 
                 Debug.WriteLine($"Result: {sumTemp}");
-                firstCalculation = true;
             }
             catch (Exception ex)
             {
@@ -119,15 +107,44 @@ namespace Calculator
 
         private double CalculateInput(string expression)
         {
-            string[] calculationArray = Regex.Split(expression, @"(?<=[+\-*/])|(?=[+\-*/])");
-            double result = double.Parse(calculationArray[0]);
+            List<string> numbers = [];
+            List<char> operands = [];
 
-            for (int i = 1; i < calculationArray.Length; i += 2)
+            string currentNumber = "";
+            foreach (char ch in expression)
             {
-                char op = char.Parse(calculationArray[i]);
-                double num = double.Parse(calculationArray[i + 1]);
+                if (char.IsDigit(ch) || ch == '.')
+                {
+                    currentNumber += ch;
+                }
+                else if (ch == '+' || ch == '-' || ch == '%' || ch == '^' || ch == '*' || ch == '/')
+                {
+                    if (!string.IsNullOrEmpty(currentNumber)) // Reset the currentNumber value to not make it keep adding up.
+                    {
+                        numbers.Add(currentNumber);
+                        currentNumber = "";
+                    }
+                    operands.Add(ch);
+                }
+                else if (!char.IsWhiteSpace(ch))
+                {
+                    DisplayAlert("Error", $"Invalid character in expression: \"{ch}\"", "Ok");
+                    return 0;
+                }
+            }
 
-                result = ApplyOperation(result, num, op);
+            if (!string.IsNullOrEmpty(currentNumber))
+            {
+                numbers.Add(currentNumber);
+            }
+            double result = double.Parse(numbers[0], CultureInfo.InvariantCulture); // https://stackoverflow.com/questions/1354924/how-do-i-parse-a-string-with-a-decimal-point-to-a-double
+            for (int i = 0; i < operands.Count; i++)
+            {
+                double nextNumber = double.Parse(numbers[i + 1]);
+                char op = operands[i];
+                Debug.WriteLine($"{result} {op} {nextNumber}");
+
+                result = ApplyOperation(result, nextNumber, op);
             }
 
             return result;
@@ -137,9 +154,11 @@ namespace Calculator
         {
             switch (op)
             {
-                case '+':  return a + b;
+                case '+': return a + b;
                 case '-': return a - b;
-                case '*':  return a * b;
+                case '%': return a % b;
+                case '^': return Math.Pow(a, b);
+                case '*': return a * b;
                 case '/':
                     if (a != 0 && b != 0) return a / b;
                     else
@@ -148,7 +167,7 @@ namespace Calculator
                         return 0;
                     }
                 default:
-                    throw new InvalidOperationException($"Unsupported operator: {op}");
+                    return 0;
             }
         }
     }
