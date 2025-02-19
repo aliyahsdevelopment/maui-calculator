@@ -35,7 +35,7 @@ namespace Calculator
         {
             Button button = (Button)sender;
 
-            if (EntryCalculation.Text == "0")
+            if (EntryCalculation.Text == "0" || string.IsNullOrWhiteSpace(EntryCalculation.Text))
             {
                 EntryCalculation.Text = button.Text;
             }
@@ -47,6 +47,7 @@ namespace Calculator
 
         private void EraseButton(object sender, EventArgs e)
         {
+            // Uses substring to remove the last character of EntryCalculation
             if (EntryCalculation.Text.Length > 0)
                 EntryCalculation.Text = EntryCalculation.Text.Substring(0, EntryCalculation.Text.Length - 1);
         }
@@ -140,11 +141,11 @@ namespace Calculator
             double result = double.Parse(numbers[0], CultureInfo.InvariantCulture); // https://stackoverflow.com/questions/1354924/how-do-i-parse-a-string-with-a-decimal-point-to-a-double
             for (int i = 0; i < operands.Count; i++)
             {
-                double nextNumber = double.Parse(numbers[i + 1]);
+                double nextNumber = double.Parse(numbers[i + 1], CultureInfo.InvariantCulture); // https://stackoverflow.com/questions/1354924/how-do-i-parse-a-string-with-a-decimal-point-to-a-double
                 char op = operands[i];
-                Debug.WriteLine($"{result} {op} {nextNumber}");
-
                 result = ApplyOperation(result, nextNumber, op);
+
+                Debug.WriteLine($"{result} {op} {nextNumber} = {result}");
             }
 
             return result;
