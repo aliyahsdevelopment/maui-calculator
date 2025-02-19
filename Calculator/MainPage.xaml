@@ -9,8 +9,6 @@
         ColumnDefinitions="*,*,*,*"
         ColumnSpacing="2"
         Padding="10"
-        MinimumHeightRequest="500"
-        MinimumWidthRequest="250"
     >
         <Entry
             Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
@@ -30,31 +28,26 @@
             Padding="5"
         />
 
-        <!-- Row 1 -->
         <Button Grid.Row="2" Grid.Column="0" Text="%" Clicked="OperandButton" />
         <Button Grid.Row="2" Grid.Column="1" Text="CE" Clicked="ClearButton_Clicked" />
         <Button Grid.Row="2" Grid.Column="2" Text="C" Clicked="ClearButton_Clicked" />
         <Button Grid.Row="2" Grid.Column="3" Text="X" Clicked="OperandButton" />
 
-        <!-- Row 2 -->
         <Button Grid.Row="3" Grid.Column="0" Text="7" Clicked="NumberButton" />
         <Button Grid.Row="3" Grid.Column="1" Text="8" Clicked="NumberButton" />
         <Button Grid.Row="3" Grid.Column="2" Text="9" Clicked="NumberButton" />
         <Button Grid.Row="3" Grid.Column="3" Text="/" Clicked="OperandButton" />
 
-        <!-- Row 3 -->
         <Button Grid.Row="4" Grid.Column="0" Text="4" Clicked="NumberButton" />
         <Button Grid.Row="4" Grid.Column="1" Text="5" Clicked="NumberButton" />
         <Button Grid.Row="4" Grid.Column="2" Text="6" Clicked="NumberButton" />
         <Button Grid.Row="4" Grid.Column="3" Text="-" Clicked="OperandButton" />
 
-        <!-- Row 4 -->
         <Button Grid.Row="5" Grid.Column="0" Text="1" Clicked="NumberButton" />
         <Button Grid.Row="5" Grid.Column="1" Text="2" Clicked="NumberButton" />
         <Button Grid.Row="5" Grid.Column="2" Text="3" Clicked="NumberButton" />
         <Button Grid.Row="5" Grid.Column="3" Text="+" Clicked="OperandButton" />
 
-        <!-- Row 5 -->
         <Button Grid.Row="6" Grid.Column="0" Text="Erase" Clicked="EraseButton" />
         <Button Grid.Row="6" Grid.Column="1" Text="0" Clicked="NumberButton" />
         <Button Grid.Row="6" Grid.Column="2" Text="," Clicked="CommaButton" />
