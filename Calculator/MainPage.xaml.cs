@@ -86,6 +86,7 @@ namespace Calculator
                     return;
                 }
 
+                // Replace specific characters to make it useable in anyway
                 input = input.Replace("X", "*");
                 input = input.Replace("x", "*");
                 input = input.Replace(",", ".");
@@ -112,6 +113,7 @@ namespace Calculator
             List<char> operands = [];
 
             string currentNumber = "";
+            // Adds all numbers and operators to seperate Lists to later use them to calculate the values
             foreach (char ch in expression)
             {
                 if (char.IsDigit(ch) || ch == '.')
@@ -134,10 +136,13 @@ namespace Calculator
                 }
             }
 
+            // If the currentNumber is not null or empty then add it to the numbers List
             if (!string.IsNullOrEmpty(currentNumber))
             {
                 numbers.Add(currentNumber);
             }
+
+            // Calculate the result of all the numbers and operators
             double result = double.Parse(numbers[0], CultureInfo.InvariantCulture); // https://stackoverflow.com/questions/1354924/how-do-i-parse-a-string-with-a-decimal-point-to-a-double
             for (int i = 0; i < operands.Count; i++)
             {
